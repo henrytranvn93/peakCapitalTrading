@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { convertTime } from '../utils/utils';
 import { v4 as uuidv4 } from 'uuid';
+
 const API_KEY = process.env.REACT_APP_API_KEY;
 const URL = process.env.REACT_APP_API_SERVER;
 
@@ -18,12 +19,12 @@ export default function Datatable({ticker, speed}) {
         axios.get(`${URL}/${search}?apiKey=${API_KEY}`)
         .then(res => {
             if (res.data.status !== "NOT_FOUND") {
-                // if(lastTrades.length > 0 && res.data.t === lastTrades[lastTrades.length - 1].t) {
-                //     clearInterval(getTrades)
-                // } else {
+                if(lastTrades.length > 0 && res.data.t === lastTrades[lastTrades.length - 1].t) {
+                    clearInterval(getTrades)
+                } else {
                     lastTrades.push(res.data);
                     setLastTrades([...lastTrades]);
-                // }
+                }
             } else {
               alert(`Ticker ${search} Not Found!`);
               clearInterval(getTrades);
@@ -32,7 +33,6 @@ export default function Datatable({ticker, speed}) {
         .catch(err => {
           console.log(err);
         })
-        console.log(lastTrades);
       }
 
     return (
@@ -49,3 +49,5 @@ export default function Datatable({ticker, speed}) {
             : <p className="dataTable__loading">Loading... </p>
         )
 }
+
+
