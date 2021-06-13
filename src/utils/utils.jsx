@@ -1,13 +1,12 @@
 import React from 'react';
 
 export function convertTime(timestamp) {
-    let time = Math.round(timestamp/1000000);
-    console.log(time);
-
-    let hours = time.getHours();
-    let minutes = time.getMinutes();
-    let seconds = time.getSeconds();
-    let milliseconds = time.getMilliseconds();
+    let time = new Date(Math.round(timestamp/1000000));
+    
+    let hours = time.getUTCHours();
+    let minutes = time.getUTCMinutes();
+    let seconds = time.getUTCSeconds();
+    let milliseconds = time.getUTCMilliseconds();
 
     let formattedTime = hours.toString().padStart(2, '0') + ':' + 
     minutes.toString().padStart(2, '0') + ':' + 

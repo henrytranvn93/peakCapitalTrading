@@ -1,42 +1,28 @@
 import React, { useState } from 'react';
 import './App.scss';
-import { convertTime } from './utils/utils';
-import axios from 'axios';
+
+import Datatable from './components/Datatable';
 import searchIcon from "./assets/searchIcon.svg";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
-const URL = process.env.REACT_APP_API_SERVER;
 
 function App() {
-  const [lastTrades, setLastTrades] = useState([]);
   const [submit, setSubmit] = useState(false);
+  const [ticker, setTicker] = useState('');
+  const [speed, setSpeed] = useState(1);
 
   const handleSearch = (event) => {
     event.preventDefault();
     let searchQuery = event.target.search.value.toUpperCase();
-    let getTrades = setInterval(() => getLastTrade(searchQuery, getTrades), 1000);
+    setTicker(searchQuery);
+    setSubmit(true);
   }
 
   const handleReset = () => {
     window.location.reload(); 
   }
 
-  const getLastTrade = (search, getTrades) => {
-
-    axios.get(`${URL}/${search}?apiKey=${API_KEY}`)
-    .then(res => {
-        if (res.data.status !== "NOT_FOUND") {
-        setLastTrades([...lastTrades, res.data]);
-        setSubmit(true);
-        } else {
-          alert(`Ticker ${search} Not Found!`);
-          clearInterval(getTrades);
-        }
-        console.log(lastTrades);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+  const handleChange = (e) => {
+    setSpeed(e.target.value);
   }
 
 
@@ -57,7 +43,7 @@ function App() {
             </div>
           </form>
           <button onClick={handleReset} className="timeSales__reset-button">Choose another ticker</button>
-          <select className="timeSales__speed-button">
+          <select value={speed} onChange={handleChange} className="timeSales__speed-button">
             <option value="1">Normal speed</option>
             <option value="2">2X speed</option>
             <option value="4">4X speed</option>
@@ -70,13 +56,7 @@ function App() {
             <h4 className="dataTable__title">Price</h4>
             <h4 className="dataTable__title">Size</h4>
           </div>
-          {lastTrades.length > 0 ? lastTrades.map(trade => <div className="dataTable__last-trade">
-              <div className="dataTable__time">{convertTime(trade.results.f)}</div>
-              <div className="dataTable__price"></div>
-              <div className="dataTable__size"></div>
-              
-            </div>) : `No data ${lastTrades.length}`}
-
+          {submit ? <Datatable ticker={ticker} speed={speed}/> : <p className="dataTable__notification">Please enter ticker to get data</p>}
         </div>
 
     </div>

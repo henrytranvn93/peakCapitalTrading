@@ -117,11 +117,34 @@
       flex-direction: column;
 
       @include tablet {
-          width: 60%;
+        width: 60%;
+      }
+
+      &__notification, &__loading {
+        text-align: center;
+        font-weight: 700;
+        color: grey;
       }
 
       &__titles {
-          display: flex;
-          justify-content: space-between;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      &__info {
+        text-align: right;
+        max-width: 200px;
+      }
+
+      &__price {
+        position: relative;
+        right: 25px;
+      }
+
+      &__last-trade {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid grey;
+        padding: 5px 0;
       }
   }
